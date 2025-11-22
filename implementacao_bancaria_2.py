@@ -1,4 +1,5 @@
 import textwrap
+import functools
 from abc import ABC, abstractclassmethod, abstractproperty
 from datetime import datetime
 
@@ -190,7 +191,17 @@ class Deposito(Transacao):
 
 
 def log_transacao(func):
-    pass
+    funcao = func.__name__.title()
+
+    @functools.wraps(func)
+    def horario(*args, **kwargs):
+        print(f'Executando "{funcao}"')
+
+        func(*args, **kwargs)
+
+        print(f'{funcao} executado em: {datetime.now()}')
+
+    return horario
 
 
 def menu():
